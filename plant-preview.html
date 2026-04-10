@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Bloomly Plant Preview</title>
+<style>
+  body { background: #1a1a2e; font-family: system-ui; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; gap: 40px; }
+  h1 { color: #fff; font-size: 24px; margin: 0; }
+  h2 { color: #A8C5A0; font-size: 18px; margin: 0 0 8px 0; }
+  .row { display: flex; gap: 24px; align-items: flex-end; }
+  .plant-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100px;
+  }
+  .plant-card span { color: #aaa; font-size: 12px; }
+  .section { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+</style>
+</head>
+<body>
+
+<h1>Bloomly — Plant SVG Preview</h1>
+
+<!-- ═══════════════════ MARGARITA (Daisy) ═══════════════════ -->
+<div class="section">
+  <h2>Margarita (Daisy)</h2>
+  <div class="row">
+
+    <!-- SEED -->
+    <div class="plant-card">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <!-- Tierra -->
+        <ellipse cx="32" cy="54" rx="20" ry="4" fill="#8B7355" opacity="0.3"/>
+        <!-- Semilla -->
+        <ellipse cx="32" cy="40" rx="8" ry="10" fill="#8B6F4E" />
+        <ellipse cx="32" cy="38" rx="6" ry="7" fill="#A0845C" opacity="0.5"/>
+        <!-- Grieta -->
+        <path d="M32 32 L33 36 L31 40 L32 44" stroke="#6B5740" stroke-width="1" fill="none" stroke-linecap="round"/>
+        <!-- Brillo -->
+        <ellipse cx="29" cy="36" rx="2" ry="3" fill="white" opacity="0.15"/>
+      </svg>
+      <span>Seed</span>
+    </div>
+
+    <!-- SPROUT -->
+    <div class="plant-card">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <!-- Tierra -->
+        <ellipse cx="32" cy="54" rx="20" ry="4" fill="#8B7355" opacity="0.3"/>
+        <!-- Tallo -->
+        <path d="M32 54 L32 30" stroke="#7D9B76" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Hoja izq -->
+        <path d="M32 42 Q24 36 22 40 Q24 44 32 42Z" fill="#7D9B76"/>
+        <path d="M32 42 Q24 36 22 40" stroke="#6B8A64" stroke-width="0.5" fill="none"/>
+        <!-- Hoja der -->
+        <path d="M32 38 Q40 32 42 36 Q40 40 32 38Z" fill="#A8C5A0"/>
+        <path d="M32 38 Q40 32 42 36" stroke="#7D9B76" stroke-width="0.5" fill="none"/>
+        <!-- Puntita -->
+        <ellipse cx="32" cy="28" rx="3" ry="4" fill="#A8C5A0"/>
+        <ellipse cx="32" cy="27" rx="2" ry="2.5" fill="#B8D5B0" opacity="0.5"/>
+      </svg>
+      <span>Sprout</span>
+    </div>
+
+    <!-- BUD -->
+    <div class="plant-card">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <!-- Tierra -->
+        <ellipse cx="32" cy="54" rx="20" ry="4" fill="#8B7355" opacity="0.3"/>
+        <!-- Tallo -->
+        <path d="M32 54 L32 26" stroke="#7D9B76" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Hoja izq -->
+        <path d="M32 46 Q22 38 20 44 Q22 48 32 46Z" fill="#7D9B76"/>
+        <!-- Hoja der -->
+        <path d="M32 40 Q42 32 44 38 Q42 42 32 40Z" fill="#A8C5A0"/>
+        <!-- Capullo (sépalos) -->
+        <path d="M28 26 Q30 18 32 16 Q34 18 36 26Z" fill="#7D9B76"/>
+        <path d="M26 28 Q28 20 32 16 Q28 22 26 28Z" fill="#6B8A64" opacity="0.5"/>
+        <!-- Puntita amarilla asomando -->
+        <ellipse cx="32" cy="18" rx="3" ry="2" fill="#F4C430" opacity="0.6"/>
+      </svg>
+      <span>Bud</span>
+    </div>
+
+    <!-- FLOWER -->
+    <div class="plant-card">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <!-- Tierra -->
+        <ellipse cx="32" cy="54" rx="20" ry="4" fill="#8B7355" opacity="0.3"/>
+        <!-- Tallo -->
+        <path d="M32 54 L32 30" stroke="#7D9B76" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Hoja izq -->
+        <path d="M32 48 Q22 40 20 46 Q22 50 32 48Z" fill="#7D9B76"/>
+        <!-- Hoja der -->
+        <path d="M32 42 Q42 34 44 40 Q42 44 32 42Z" fill="#A8C5A0"/>
+        <!-- Pétalos (8 pétalos blancos) -->
+        <ellipse cx="32" cy="14" rx="4" ry="7" fill="#FFF8E7" opacity="0.9"/>
+        <ellipse cx="32" cy="14" rx="4" ry="7" fill="#FFF8E7" opacity="0.9" transform="rotate(45 32 22)"/>
+        <ellipse cx="32" cy="14" rx="4" ry="7" fill="#FFF8E7" opacity="0.9" transform="rotate(90 32 22)"/>
+        <ellipse cx="32" cy="14" rx="4" ry="7" fill="#FFF8E7" opacity="0.9" transform="rotate(135 32 22)"/>
+        <ellipse cx="32" cy="14" rx="4" ry="7" fill="#FFEFD5" opacity="0.8" transform="rotate(22.5 32 22)"/>
+        <ellipse cx="32" cy="14" rx="4" ry="7" fill="#FFEFD5" opacity="0.8" transform="rotate(67.5 32 22)"/>
+        <ellipse cx="32" cy="14" rx="4" ry="7" fill="#FFEFD5" opacity="0.8" transform="rotate(112.5 32 22)"/>
+        <ellipse cx="32" cy="14" rx="4" ry="7" fill="#FFEFD5" opacity="0.8" transform="rotate(157.5 32 22)"/>
+        <!-- Centro -->
+        <circle cx="32" cy="22" r="5" fill="#F4C430"/>
+        <circle cx="32" cy="22" r="3.5" fill="#E8B820" opacity="0.6"/>
+        <circle cx="30" cy="20.5" r="1" fill="#FFF8E7" opacity="0.3"/>
+      </svg>
+      <span>Flower</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ CACTUS ═══════════════════ -->
+<div class="section">
+  <h2>Cactus</h2>
+  <div class="row">
+
+    <!-- SEED -->
+    <div class="plant-card">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <ellipse cx="32" cy="54" rx="20" ry="4" fill="#8B7355" opacity="0.3"/>
+        <ellipse cx="32" cy="40" rx="7" ry="9" fill="#5B6B4E"/>
+        <ellipse cx="32" cy="38" rx="5" ry="6" fill="#6B7B5E" opacity="0.5"/>
+        <path d="M32 33 L31 37 L33 41" stroke="#4A5A3E" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+        <ellipse cx="29.5" cy="37" rx="1.5" ry="2.5" fill="white" opacity="0.1"/>
+      </svg>
+      <span>Seed</span>
+    </div>
+
+    <!-- SPROUT -->
+    <div class="plant-card">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <ellipse cx="32" cy="54" rx="20" ry="4" fill="#8B7355" opacity="0.3"/>
+        <!-- Bolita de cactus bebe -->
+        <ellipse cx="32" cy="42" rx="8" ry="10" fill="#5B8C5A"/>
+        <ellipse cx="32" cy="40" rx="6" ry="7" fill="#6B9C6A" opacity="0.4"/>
+        <!-- Costillas -->
+        <path d="M28 34 L28 50" stroke="#4A7B49" stroke-width="0.6" opacity="0.5"/>
+        <path d="M32 32 L32 50" stroke="#4A7B49" stroke-width="0.6" opacity="0.5"/>
+        <path d="M36 34 L36 50" stroke="#4A7B49" stroke-width="0.6" opacity="0.5"/>
+        <!-- Espinitas -->
+        <circle cx="28" cy="38" r="0.8" fill="#C8D5B0"/>
+        <circle cx="36" cy="36" r="0.8" fill="#C8D5B0"/>
+        <circle cx="32" cy="34" r="0.8" fill="#C8D5B0"/>
+        <!-- Brillo -->
+        <ellipse cx="29" cy="39" rx="2" ry="4" fill="white" opacity="0.1"/>
+      </svg>
+      <span>Sprout</span>
+    </div>
+
+    <!-- BUD -->
+    <div class="plant-card">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <ellipse cx="32" cy="54" rx="20" ry="4" fill="#8B7355" opacity="0.3"/>
+        <!-- Cuerpo -->
+        <rect x="24" y="28" width="16" height="26" rx="8" fill="#5B8C5A"/>
+        <rect x="26" y="30" width="12" height="20" rx="6" fill="#6B9C6A" opacity="0.3"/>
+        <!-- Brazo izq -->
+        <path d="M24 40 Q18 38 18 34 Q18 30 22 32" stroke="#5B8C5A" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <!-- Brazo der -->
+        <path d="M40 36 Q46 34 46 30 Q46 26 42 28" stroke="#5B8C5A" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <!-- Costillas -->
+        <path d="M29 30 L29 52" stroke="#4A7B49" stroke-width="0.6" opacity="0.4"/>
+        <path d="M32 28 L32 54" stroke="#4A7B49" stroke-width="0.6" opacity="0.4"/>
+        <path d="M35 30 L35 52" stroke="#4A7B49" stroke-width="0.6" opacity="0.4"/>
+        <!-- Espinas -->
+        <line x1="24" y1="34" x2="22" y2="33" stroke="#C8D5B0" stroke-width="1" stroke-linecap="round"/>
+        <line x1="40" y1="38" x2="42" y2="37" stroke="#C8D5B0" stroke-width="1" stroke-linecap="round"/>
+        <line x1="24" y1="42" x2="22" y2="41" stroke="#C8D5B0" stroke-width="1" stroke-linecap="round"/>
+        <!-- Capullo arriba -->
+        <ellipse cx="32" cy="28" rx="4" ry="3" fill="#FF8FAB" opacity="0.5"/>
+      </svg>
+      <span>Bud</span>
+    </div>
+
+    <!-- FLOWER -->
+    <div class="plant-card">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <ellipse cx="32" cy="54" rx="20" ry="4" fill="#8B7355" opacity="0.3"/>
+        <!-- Cuerpo -->
+        <rect x="24" y="28" width="16" height="26" rx="8" fill="#5B8C5A"/>
+        <rect x="26" y="30" width="12" height="20" rx="6" fill="#6B9C6A" opacity="0.3"/>
+        <!-- Brazo izq -->
+        <path d="M24 40 Q18 38 18 34 Q18 30 22 32" stroke="#5B8C5A" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <!-- Brazo der -->
+        <path d="M40 36 Q46 34 46 30 Q46 26 42 28" stroke="#5B8C5A" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <!-- Costillas -->
+        <path d="M29 30 L29 52" stroke="#4A7B49" stroke-width="0.6" opacity="0.4"/>
+        <path d="M32 28 L32 54" stroke="#4A7B49" stroke-width="0.6" opacity="0.4"/>
+        <path d="M35 30 L35 52" stroke="#4A7B49" stroke-width="0.6" opacity="0.4"/>
+        <!-- Espinas -->
+        <line x1="24" y1="34" x2="22" y2="33" stroke="#C8D5B0" stroke-width="1" stroke-linecap="round"/>
+        <line x1="40" y1="38" x2="42" y2="37" stroke="#C8D5B0" stroke-width="1" stroke-linecap="round"/>
+        <!-- Flor rosa en la punta -->
+        <ellipse cx="32" cy="22" rx="3.5" ry="5" fill="#FF8FAB"/>
+        <ellipse cx="28" cy="24" rx="3.5" ry="5" fill="#FFB3C6" transform="rotate(-30 28 24)"/>
+        <ellipse cx="36" cy="24" rx="3.5" ry="5" fill="#FFB3C6" transform="rotate(30 36 24)"/>
+        <circle cx="32" cy="24" r="2.5" fill="#FFD700"/>
+        <circle cx="31" cy="23" r="0.8" fill="white" opacity="0.3"/>
+      </svg>
+      <span>Flower</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ ROSA (Rose) ═══════════════════ -->
+<div class="section">
+  <h2>Rosa (Rose)</h2>
+  <div class="row">
+
+    <!-- SEED -->
+    <div class="plant-card">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <ellipse cx="32" cy="54" rx="20" ry="4" fill="#8B7355" opacity="0.3"/>
+        <ellipse cx="32" cy="40" rx="7" ry="9" fill="#8B5E6B"/>
+        <ellipse cx="32" cy="38" rx="5" ry="6" fill="#9B6E7B" opacity="0.5"/>
+        <path d="M30 34 L32 40 L30 44" stroke="#7B4E5B" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+        <ellipse cx="29.5" cy="37" rx="1.5" ry="2.5" fill="white" opacity="0.12"/>
+      </svg>
+      <span>Seed</span>
+    </div>
+
+    <!-- SPROUT -->
+    <div class="plant-card">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <ellipse cx="32" cy="54" rx="20" ry="4" fill="#8B7355" opacity="0.3"/>
+        <!-- Tallo con espinita -->
+        <path d="M32 54 L32 30" stroke="#6B8A64" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="32" y1="44" x2="30" y2="42" stroke="#6B8A64" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- Hojas (tono rojizo en puntas) -->
+        <path d="M32 40 Q22 34 22 38 Q24 42 32 40Z" fill="#7D9B76"/>
+        <path d="M22 38 Q23 35 28 36" stroke="#9B6E7B" stroke-width="0.8" fill="none" opacity="0.5"/>
+        <path d="M32 34 Q42 28 42 32 Q40 36 32 34Z" fill="#A8C5A0"/>
+        <path d="M42 32 Q41 29 36 30" stroke="#9B6E7B" stroke-width="0.8" fill="none" opacity="0.5"/>
+        <!-- Puntita rojiza -->
+        <ellipse cx="32" cy="28" rx="3" ry="4" fill="#C87D94"/>
+        <ellipse cx="32" cy="27" rx="2" ry="2.5" fill="#D89AAD" opacity="0.5"/>
+      </svg>
+      <span>Sprout</span>
+    </div>
+
+    <!-- BUD -->
+    <div class="plant-card">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <ellipse cx="32" cy="54" rx="20" ry="4" fill="#8B7355" opacity="0.3"/>
+        <!-- Tallo -->
+        <path d="M32 54 L32 28" stroke="#6B8A64" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="32" y1="46" x2="29" y2="44" stroke="#6B8A64" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="32" y1="38" x2="35" y2="36" stroke="#6B8A64" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- Hojas -->
+        <path d="M32 48 Q22 42 20 46 Q22 50 32 48Z" fill="#7D9B76"/>
+        <path d="M32 40 Q42 34 44 38 Q42 42 32 40Z" fill="#A8C5A0"/>
+        <!-- Capullo cerrado -->
+        <path d="M28 28 Q30 16 32 14 Q34 16 36 28Z" fill="#E8A0BF"/>
+        <path d="M26 30 Q29 18 32 14" stroke="#D4899B" stroke-width="0.8" fill="none"/>
+        <path d="M30 28 Q31 20 32 14 Q33 20 34 28Z" fill="#D4899B" opacity="0.5"/>
+        <!-- Sépalos -->
+        <path d="M28 28 Q26 26 27 24" stroke="#6B8A64" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M36 28 Q38 26 37 24" stroke="#6B8A64" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <span>Bud</span>
+    </div>
+
+    <!-- FLOWER -->
+    <div class="plant-card">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <ellipse cx="32" cy="54" rx="20" ry="4" fill="#8B7355" opacity="0.3"/>
+        <!-- Tallo -->
+        <path d="M32 54 L32 30" stroke="#6B8A64" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="32" y1="48" x2="29" y2="46" stroke="#6B8A64" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="32" y1="40" x2="35" y2="38" stroke="#6B8A64" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- Hojas -->
+        <path d="M32 50 Q22 44 20 48 Q22 52 32 50Z" fill="#7D9B76"/>
+        <path d="M32 42 Q42 36 44 40 Q42 44 32 42Z" fill="#A8C5A0"/>
+        <!-- Rosa — capas de pétalos -->
+        <!-- Capa exterior -->
+        <ellipse cx="26" cy="22" rx="5" ry="7" fill="#E8A0BF" transform="rotate(-20 26 22)"/>
+        <ellipse cx="38" cy="22" rx="5" ry="7" fill="#E8A0BF" transform="rotate(20 38 22)"/>
+        <ellipse cx="32" cy="16" rx="5" ry="6" fill="#EDAFCA"/>
+        <ellipse cx="28" cy="26" rx="5" ry="5" fill="#EDAFCA" transform="rotate(-10 28 26)"/>
+        <ellipse cx="36" cy="26" rx="5" ry="5" fill="#EDAFCA" transform="rotate(10 36 26)"/>
+        <!-- Capa interior -->
+        <ellipse cx="30" cy="20" rx="3.5" ry="5" fill="#D4899B" transform="rotate(-15 30 20)"/>
+        <ellipse cx="34" cy="20" rx="3.5" ry="5" fill="#D4899B" transform="rotate(15 34 20)"/>
+        <ellipse cx="32" cy="18" rx="3" ry="4" fill="#C87D94"/>
+        <!-- Centro espiral -->
+        <circle cx="32" cy="21" r="3" fill="#BB6B84"/>
+        <path d="M31 20 Q32 18 33 20 Q34 22 32 22 Q30 22 31 20Z" fill="#A85A73" opacity="0.6"/>
+        <!-- Brillo -->
+        <circle cx="30" cy="18" r="1" fill="white" opacity="0.2"/>
+      </svg>
+      <span>Flower</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ Size comparison on dark card ═══════════════════ -->
+<div class="section">
+  <h2>En contexto (68x68 card como en la app)</h2>
+  <div class="row">
+    <div style="width:68px;height:68px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;display:flex;align-items:center;justify-content:center;">
+      <svg width="48" height="48" viewBox="0 0 64 64" fill="none">
+        <ellipse cx="32" cy="54" rx="20" ry="4" fill="#8B7355" opacity="0.3"/>
+        <ellipse cx="32" cy="40" rx="8" ry="10" fill="#8B6F4E" />
+        <ellipse cx="32" cy="38" rx="6" ry="7" fill="#A0845C" opacity="0.5"/>
+        <path d="M32 32 L33 36 L31 40 L32 44" stroke="#6B5740" stroke-width="1" fill="none" stroke-linecap="round"/>
+        <ellipse cx="29" cy="36" rx="2" ry="3" fill="white" opacity="0.15"/>
+      </svg>
+    </div>
+    <div style="width:68px;height:68px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;display:flex;align-items:center;justify-content:center;">
+      <svg width="48" height="48" viewBox="0 0 64 64" fill="none">
+        <ellipse cx="32" cy="54" rx="20" ry="4" fill="#8B7355" opacity="0.3"/>
+        <path d="M32 54 L32 30" stroke="#7D9B76" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M32 42 Q24 36 22 40 Q24 44 32 42Z" fill="#7D9B76"/>
+        <path d="M32 38 Q40 32 42 36 Q40 40 32 38Z" fill="#A8C5A0"/>
+        <ellipse cx="32" cy="28" rx="3" ry="4" fill="#A8C5A0"/>
+        <ellipse cx="32" cy="27" rx="2" ry="2.5" fill="#B8D5B0" opacity="0.5"/>
+      </svg>
+    </div>
+    <div style="width:68px;height:68px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;display:flex;align-items:center;justify-content:center;">
+      <svg width="48" height="48" viewBox="0 0 64 64" fill="none">
+        <ellipse cx="32" cy="54" rx="20" ry="4" fill="#8B7355" opacity="0.3"/>
+        <path d="M32 54 L32 30" stroke="#7D9B76" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M32 48 Q22 40 20 46 Q22 50 32 48Z" fill="#7D9B76"/>
+        <path d="M32 42 Q42 34 44 40 Q42 44 32 42Z" fill="#A8C5A0"/>
+        <ellipse cx="32" cy="22" rx="3.5" ry="5" fill="#FF8FAB"/>
+        <ellipse cx="28" cy="24" rx="3.5" ry="5" fill="#FFB3C6" transform="rotate(-30 28 24)"/>
+        <ellipse cx="36" cy="24" rx="3.5" ry="5" fill="#FFB3C6" transform="rotate(30 36 24)"/>
+        <circle cx="32" cy="24" r="2.5" fill="#FFD700"/>
+        <circle cx="31" cy="23" r="0.8" fill="white" opacity="0.3"/>
+      </svg>
+    </div>
+    <div style="width:68px;height:68px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;display:flex;align-items:center;justify-content:center;">
+      <svg width="48" height="48" viewBox="0 0 64 64" fill="none">
+        <ellipse cx="32" cy="54" rx="20" ry="4" fill="#8B7355" opacity="0.3"/>
+        <path d="M32 54 L32 30" stroke="#6B8A64" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M32 50 Q22 44 20 48 Q22 52 32 50Z" fill="#7D9B76"/>
+        <path d="M32 42 Q42 36 44 40 Q42 44 32 42Z" fill="#A8C5A0"/>
+        <ellipse cx="26" cy="22" rx="5" ry="7" fill="#E8A0BF" transform="rotate(-20 26 22)"/>
+        <ellipse cx="38" cy="22" rx="5" ry="7" fill="#E8A0BF" transform="rotate(20 38 22)"/>
+        <ellipse cx="32" cy="16" rx="5" ry="6" fill="#EDAFCA"/>
+        <ellipse cx="30" cy="20" rx="3.5" ry="5" fill="#D4899B" transform="rotate(-15 30 20)"/>
+        <ellipse cx="34" cy="20" rx="3.5" ry="5" fill="#D4899B" transform="rotate(15 34 20)"/>
+        <circle cx="32" cy="21" r="3" fill="#BB6B84"/>
+        <circle cx="30" cy="18" r="1" fill="white" opacity="0.2"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

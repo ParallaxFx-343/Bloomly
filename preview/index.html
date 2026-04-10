@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semillita — Preview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #FFF8F0;
+    --primary: #7D9B76;
+    --primary-light: #A8C5A0;
+    --accent: #E8A0BF;
+    --secondary: #B8A9C9;
+    --earth: #C4A882;
+    --text: #3D3229;
+    --text-light: #7A6E63;
+    --card: #FFFFFF;
+    --border: #E8DDD0;
+  }
+
+  body {
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    background: #1a1a2e;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    gap: 24px;
+    flex-wrap: wrap;
+    min-height: 100vh;
+  }
+
+  .phone {
+    width: 375px;
+    height: 812px;
+    background: var(--bg);
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .status-bar {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .screen-label {
+    position: absolute;
+    top: -30px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #aaa;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .phone-wrapper {
+    position: relative;
+    padding-top: 36px;
+  }
+
+  /* ===== ONBOARDING ===== */
+  .onboarding {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100% - 44px);
+    padding: 40px;
+    text-align: center;
+  }
+
+  .onboarding .emoji { font-size: 80px; margin-bottom: 24px; }
+  .onboarding h2 { font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+  .onboarding p { font-size: 17px; color: var(--text-light); line-height: 1.6; margin-bottom: 40px; }
+
+  .dots { display: flex; gap: 8px; justify-content: center; margin-bottom: 32px; }
+  .dot { width: 8px; height: 8px; border-radius: 4px; background: var(--border); }
+  .dot.active { width: 24px; background: var(--primary); }
+
+  .btn-primary {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* ===== GARDEN ===== */
+  .garden-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px 12px;
+  }
+  .garden-header h1 { font-size: 28px; font-weight: 700; color: var(--text); }
+  .garden-header .sub { font-size: 14px; color: var(--text-light); margin-top: 4px; }
+
+  .streak-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--card);
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .garden-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 16px;
+  }
+  .plant-cell {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    font-size: 32px;
+  }
+
+  .garden-cta {
+    position: absolute;
+    bottom: 76px;
+    left: 24px;
+    right: 24px;
+    padding: 16px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  /* ===== TAB BAR ===== */
+  .tab-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-bottom: 8px;
+  }
+  .tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-light);
+  }
+  .tab-item.active { color: var(--primary); }
+  .tab-item .tab-emoji { font-size: 24px; }
+  .tab-item:not(.active) .tab-emoji { opacity: 0.5; }
+
+  /* ===== ENTRY ===== */
+  .entry-content {
+    padding: 24px;
+    overflow-y: auto;
+    height: calc(100% - 44px);
+  }
+  .entry-content h2 { font-size: 24px; font-weight: 700; color: var(--text); text-align: center; margin-bottom: 8px; }
+  .entry-content .sub { font-size: 14px; color: var(--text-light); text-align: center; margin-bottom: 24px; }
+
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .cat-card {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: var(--card);
+    border-radius: 16px;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .cat-card.selected {
+    border-color: var(--sel-color, var(--accent));
+    background: color-mix(in srgb, var(--sel-color, var(--accent)) 12%, white);
+  }
+  .cat-card .cat-emoji { font-size: 28px; }
+  .cat-card .cat-label { font-size: 12px; color: var(--text-light); font-weight: 500; }
+  .cat-card.selected .cat-label { color: var(--text); font-weight: 700; }
+
+  .note-label { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .note-input {
+    width: 100%;
+    min-height: 80px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 15px;
+    color: var(--text);
+    resize: none;
+    font-family: inherit;
+    margin-bottom: 24px;
+  }
+
+  /* ===== CALENDAR ===== */
+  .cal-content { padding: 0 16px; }
+  .cal-content h1 { font-size: 28px; font-weight: 700; color: var(--text); text-align: center; margin: 16px 0; }
+
+  .month-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 0 8px;
+  }
+  .month-nav button { background: none; border: none; font-size: 28px; color: var(--primary); cursor: pointer; font-weight: 600; }
+  .month-nav span { font-size: 18px; font-weight: 600; color: var(--text); }
+
+  .cal-headers {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 4px;
+  }
+  .cal-headers span { text-align: center; font-size: 13px; font-weight: 600; color: var(--text-light); }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+  .cal-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .cal-cell.filled {
+    font-size: 20px;
+  }
+  .cal-cell.filled::before { display: none; }
+
+  .cal-legend {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--text-light);
+  }
+
+  /* ===== COLLECTION ===== */
+  .collection-content { padding: 24px; overflow-y: auto; height: calc(100% - 44px); }
+  .collection-content h1 { font-size: 28px; font-weight: 700; color: var(--text); text-align: center; margin-bottom: 4px; }
+  .collection-content .sub { font-size: 14px; color: var(--text-light); text-align: center; margin-bottom: 24px; }
+  .section-title { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 12px; margin-top: 8px; }
+
+  .plant-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .plant-card {
+    width: 29%;
+    aspect-ratio: 0.85;
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px;
+  }
+  .plant-card.premium { opacity: 0.6; border-color: var(--secondary); border-style: dashed; }
+  .plant-card .p-emoji { font-size: 36px; }
+  .plant-card .p-name { font-size: 12px; font-weight: 500; color: var(--text); }
+
+  /* ===== PAYWALL ===== */
+  .paywall-content {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: calc(100% - 44px);
+  }
+  .paywall-close { align-self: flex-start; font-size: 20px; color: var(--text-light); cursor: pointer; background: none; border: none; padding: 8px; }
+  .paywall-content .pw-emoji { font-size: 56px; margin-top: 8px; margin-bottom: 12px; }
+  .paywall-content h1 { font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .paywall-content .pw-sub { font-size: 15px; color: var(--text-light); text-align: center; margin-bottom: 24px; }
+
+  .pw-table {
+    width: 100%;
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 12px;
+    margin-bottom: 24px;
+  }
+  .pw-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    padding: 8px 0;
+    align-items: center;
+    font-size: 12px;
+  }
+  .pw-row.header { border-bottom: 1px solid var(--border); font-weight: 600; color: var(--text-light); }
+  .pw-row .feat { display: flex; gap: 6px; align-items: center; font-weight: 500; color: var(--text); font-size: 13px; }
+  .pw-row .free-val { text-align: center; color: var(--text-light); }
+  .pw-row .prem-val { text-align: center; color: var(--primary); font-weight: 600; }
+  .pw-row .header-prem { color: var(--primary); }
+
+  .btn-yearly { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 16px; font-size: 17px; font-weight: 600; margin-bottom: 12px; text-align: center; }
+  .btn-yearly small { display: block; font-size: 12px; opacity: 0.8; margin-top: 2px; }
+  .btn-monthly { width: 100%; padding: 14px; background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 16px; font-size: 15px; font-weight: 500; margin-bottom: 16px; text-align: center; }
+  .restore-link { font-size: 13px; color: var(--text-light); text-decoration: underline; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<!-- ===== SCREEN 1: ONBOARDING ===== -->
+<div class="phone-wrapper">
+  <div class="screen-label">Onboarding</div>
+  <div class="phone">
+    <div class="status-bar">9:41</div>
+    <div class="onboarding">
+      <div class="emoji">🌱</div>
+      <h2>Plantá gratitud</h2>
+      <p>Cada día elegí algo por lo que estás agradecida y plantá una semilla en tu jardín.</p>
+      <div class="dots">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <button class="btn-primary">Siguiente</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREEN 2: GARDEN ===== -->
+<div class="phone-wrapper">
+  <div class="screen-label">Jardín (Home)</div>
+  <div class="phone">
+    <div class="status-bar">9:41</div>
+    <div class="garden-header">
+      <div>
+        <h1>Mi Jardín</h1>
+        <div class="sub">12 plantas creciendo</div>
+      </div>
+      <div class="streak-badge">🔥 <span>5</span></div>
+    </div>
+    <div class="garden-grid">
+      <div class="plant-cell">🌼</div>
+      <div class="plant-cell">🌻</div>
+      <div class="plant-cell">🌹</div>
+      <div class="plant-cell">🪴</div>
+      <div class="plant-cell">🌷</div>
+      <div class="plant-cell">🌸</div>
+      <div class="plant-cell">🌿</div>
+      <div class="plant-cell">🌱</div>
+      <div class="plant-cell">💐</div>
+      <div class="plant-cell">🍓</div>
+      <div class="plant-cell">🌵</div>
+      <div class="plant-cell">🌰</div>
+    </div>
+    <div class="garden-cta">Plantar hoy 🌱</div>
+    <div class="tab-bar">
+      <div class="tab-item active"><span class="tab-emoji">🌿</span>Jardín</div>
+      <div class="tab-item"><span class="tab-emoji">🌱</span>Plantar</div>
+      <div class="tab-item"><span class="tab-emoji">📅</span>Calendario</div>
+      <div class="tab-item"><span class="tab-emoji">🏵️</span>Colección</div>
+      <div class="tab-item"><span class="tab-emoji">⚙️</span>Ajustes</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREEN 3: ENTRY ===== -->
+<div class="phone-wrapper">
+  <div class="screen-label">Entrada Diaria</div>
+  <div class="phone">
+    <div class="status-bar">9:41</div>
+    <div class="entry-content">
+      <h2>¿Por qué estás agradecida hoy?</h2>
+      <div class="sub">Elegí hasta 3 categorías</div>
+      <div class="cat-grid">
+        <div class="cat-card selected" style="--sel-color: #F4A5A5; border-color: #F4A5A5;">
+          <span class="cat-emoji">🏠</span>
+          <span class="cat-label">Familia</span>
+        </div>
+        <div class="cat-card">
+          <span class="cat-emoji">💚</span>
+          <span class="cat-label">Salud</span>
+        </div>
+        <div class="cat-card">
+          <span class="cat-emoji">💼</span>
+          <span class="cat-label">Trabajo</span>
+        </div>
+        <div class="cat-card selected" style="--sel-color: #FFCC80; border-color: #FFCC80;">
+          <span class="cat-emoji">👯</span>
+          <span class="cat-label">Amigos</span>
+        </div>
+        <div class="cat-card">
+          <span class="cat-emoji">🌿</span>
+          <span class="cat-label">Naturaleza</span>
+        </div>
+        <div class="cat-card">
+          <span class="cat-emoji">🍵</span>
+          <span class="cat-label">Comida</span>
+        </div>
+        <div class="cat-card">
+          <span class="cat-emoji">😴</span>
+          <span class="cat-label">Descanso</span>
+        </div>
+        <div class="cat-card selected" style="--sel-color: #F48FB1; border-color: #F48FB1;">
+          <span class="cat-emoji">💕</span>
+          <span class="cat-label">Amor</span>
+        </div>
+        <div class="cat-card">
+          <span class="cat-emoji">✨</span>
+          <span class="cat-label">Yo misma</span>
+        </div>
+      </div>
+      <div class="note-label">Nota corta (opcional)</div>
+      <textarea class="note-input" placeholder="Hoy agradezco...">Hoy agradezco la cena con mi familia y las risas con mis amigas 💛</textarea>
+      <button class="btn-primary">Plantar semilla 🌱</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREEN 4: CALENDAR ===== -->
+<div class="phone-wrapper">
+  <div class="screen-label">Calendario</div>
+  <div class="phone">
+    <div class="status-bar">9:41</div>
+    <div class="cal-content">
+      <h1>Calendario</h1>
+      <div class="month-nav">
+        <button>‹</button>
+        <span>Marzo 2026</span>
+        <button>›</button>
+      </div>
+      <div class="cal-headers">
+        <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+      </div>
+      <div class="cal-grid">
+        <div class="cal-cell"></div>
+        <div class="cal-cell"></div>
+        <div class="cal-cell"></div>
+        <div class="cal-cell"></div>
+        <div class="cal-cell"></div>
+        <div class="cal-cell"></div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell">3</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell">6</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell">10</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell">13</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell">17</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell">21</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell">26</div>
+        <div class="cal-cell filled">🌸</div>
+        <div class="cal-cell">28</div>
+        <div class="cal-cell">29</div>
+        <div class="cal-cell">30</div>
+        <div class="cal-cell">31</div>
+      </div>
+      <div class="cal-legend">🌸 = día con gratitud</div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab-item"><span class="tab-emoji">🌿</span>Jardín</div>
+      <div class="tab-item"><span class="tab-emoji">🌱</span>Plantar</div>
+      <div class="tab-item active"><span class="tab-emoji">📅</span>Calendario</div>
+      <div class="tab-item"><span class="tab-emoji">🏵️</span>Colección</div>
+      <div class="tab-item"><span class="tab-emoji">⚙️</span>Ajustes</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREEN 5: PAYWALL ===== -->
+<div class="phone-wrapper">
+  <div class="screen-label">Paywall Premium</div>
+  <div class="phone">
+    <div class="status-bar">9:41</div>
+    <div class="paywall-content">
+      <button class="paywall-close">✕</button>
+      <div class="pw-emoji">✨</div>
+      <h1>Semillita Premium</h1>
+      <div class="pw-sub">Desbloqueá todo el jardín y hacé que crezca sin límites</div>
+      <div class="pw-table">
+        <div class="pw-row header">
+          <div></div>
+          <div style="text-align:center">Free</div>
+          <div class="header-prem" style="text-align:center">Premium</div>
+        </div>
+        <div class="pw-row">
+          <div class="feat">🌱 Plantas</div>
+          <div class="free-val">9 básicas</div>
+          <div class="prem-val">30+</div>
+        </div>
+        <div class="pw-row">
+          <div class="feat">🎨 Temas</div>
+          <div class="free-val">1</div>
+          <div class="prem-val">5 únicos</div>
+        </div>
+        <div class="pw-row">
+          <div class="feat">🎵 Sonidos</div>
+          <div class="free-val">1</div>
+          <div class="prem-val">6</div>
+        </div>
+        <div class="pw-row">
+          <div class="feat">📊 Stats</div>
+          <div class="free-val">Racha</div>
+          <div class="prem-val">Completas</div>
+        </div>
+        <div class="pw-row">
+          <div class="feat">📢 Anuncios</div>
+          <div class="free-val">Con ads</div>
+          <div class="prem-val">Sin ads</div>
+        </div>
+      </div>
+      <div class="btn-yearly">Anual — $2.499/año<small>Ahorrás 58%</small></div>
+      <div class="btn-monthly">Mensual — $499/mes</div>
+      <span class="restore-link">Restaurar compra</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
