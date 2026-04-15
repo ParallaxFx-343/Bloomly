@@ -22,7 +22,7 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "package": "com.bloomly.app"
+      "package": "com.parallaxfx.bloomly"
     },
     "plugins": [
       "expo-router",
