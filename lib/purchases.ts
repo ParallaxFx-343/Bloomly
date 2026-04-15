@@ -8,8 +8,9 @@ import { Platform } from 'react-native';
 // ─── Configuration ───────────────────────────────────────────────
 // Replace these with your actual RevenueCat API keys from
 // https://app.revenuecat.com → Project → API Keys
+// TODO: Replace with production goog_ key from RevenueCat dashboard before Play Store submission
 const REVENUECAT_API_KEY_ANDROID = 'test_nbouVGhppdIbhyUdzVYeRZCTbKA';
-const REVENUECAT_API_KEY_IOS = 'YOUR_REVENUECAT_IOS_API_KEY';
+const REVENUECAT_API_KEY_IOS = 'YOUR_REVENUECAT_IOS_API_KEY'; // Not used — Android only
 
 // Entitlement ID configured in RevenueCat dashboard
 export const ENTITLEMENT_ID = 'premium';
@@ -35,7 +36,7 @@ export async function initPurchases(): Promise<void> {
     return;
   }
 
-  Purchases.setLogLevel(__DEV__ ? LOG_LEVEL.DEBUG : LOG_LEVEL.INFO);
+  Purchases.setLogLevel(__DEV__ ? LOG_LEVEL.DEBUG : LOG_LEVEL.ERROR);
   Purchases.configure({ apiKey });
   isConfigured = true;
 }

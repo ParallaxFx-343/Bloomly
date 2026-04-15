@@ -37,6 +37,17 @@ async function markAdRewardClaimed(): Promise<void> {
 export function showRewardedAd(): Promise<boolean> {
   return new Promise((resolve) => {
     const rewarded = RewardedAd.createForAdRequest(getAdUnitId());
+    let settled = false;
+
+    function settle(value: boolean) {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      resolve(value);
+    }
+
+    // Timeout — prevent infinite hang if ad never loads
+    const timeout = setTimeout(() => settle(false), 15_000);
 
     const unsubLoaded = rewarded.addAdEventListener(
       RewardedAdEventType.LOADED,
@@ -49,17 +60,14 @@ export function showRewardedAd(): Promise<boolean> {
       RewardedAdEventType.EARNED_REWARD,
       async () => {
         await markAdRewardClaimed();
-        cleanup();
-        resolve(true);
+        settle(true);
       },
     );
 
     const unsubClosed = rewarded.addAdEventListener(
       AdEventType.CLOSED,
       () => {
-        // Ad was closed — if reward wasn't earned yet, resolve false
-        cleanup();
-        resolve(false);
+        settle(false);
       },
     );
 
@@ -67,12 +75,12 @@ export function showRewardedAd(): Promise<boolean> {
       AdEventType.ERROR,
       (error) => {
         if (__DEV__) console.warn('[Ads] Rewarded ad error:', error);
-        cleanup();
-        resolve(false);
+        settle(false);
       },
     );
 
     function cleanup() {
+      clearTimeout(timeout);
       unsubLoaded();
       unsubEarned();
       unsubClosed();

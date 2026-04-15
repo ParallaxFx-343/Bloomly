@@ -7,6 +7,7 @@ import {
   RefreshControl,
   Pressable,
   Alert,
+  InteractionManager,
 } from 'react-native';
 import ViewShot, { captureRef } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
@@ -100,14 +101,17 @@ export default function GardenScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      loadData();
-      // Auto-play ambient matching current time period
-      if (!isAmbientPlaying()) {
-        playAmbientForPeriod(timePeriod)
-          .then(() => setAmbientOn(true))
-          .catch(() => {});
-      }
+      // Defer DB queries until animations/transitions settle
+      const task = InteractionManager.runAfterInteractions(() => {
+        loadData();
+        if (!isAmbientPlaying()) {
+          playAmbientForPeriod(timePeriod)
+            .then(() => setAmbientOn(true))
+            .catch(() => {});
+        }
+      });
       return () => {
+        task.cancel();
         if (milestoneTimer.current) clearTimeout(milestoneTimer.current);
       };
     }, [loadData, timePeriod])
@@ -310,7 +314,7 @@ export default function GardenScreen() {
         >
           <ConfettiCannon
             ref={confettiRef}
-            count={80}
+            count={40}
             origin={{ x: -10, y: 0 }}
             fadeOut
             autoStart

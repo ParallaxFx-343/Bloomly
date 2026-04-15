@@ -47,7 +47,9 @@ const AMBIENT_BY_PERIOD: Record<TimePeriod, AmbientLayer[]> = {
 // ─── State ───────────────────────────────────────────────
 
 const sfxCache: Map<SfxName, AudioPlayer> = new Map();
-let ambientPlayers: AudioPlayer[] = [];
+// Pool: one AudioPlayer per unique asset, reused across period transitions
+const ambientPool: Map<AudioSource, AudioPlayer> = new Map();
+let activeAmbientPlayers: AudioPlayer[] = [];
 let currentAmbientPeriod: TimePeriod | null = null;
 let isSoundEnabled = true;
 
@@ -103,31 +105,44 @@ export async function playSound(name: SfxName): Promise<void> {
 
 // ─── Ambient (time-of-day layered loops) ─────────────────
 
+/** Get or create a pooled player for an ambient asset */
+function getPooledPlayer(asset: AudioSource): AudioPlayer {
+  let player = ambientPool.get(asset);
+  if (!player) {
+    player = createAudioPlayer(asset);
+    player.loop = true;
+    ambientPool.set(asset, player);
+  }
+  return player;
+}
+
 /**
  * Play ambient soundscape matching the current time period.
- * If already playing the same period, does nothing (avoids restart).
+ * Reuses pooled AudioPlayers — pause/play instead of destroy/recreate.
  */
 export async function playAmbientForPeriod(period: TimePeriod): Promise<void> {
   if (!isSoundEnabled) return;
   // Already playing this period — skip
-  if (currentAmbientPeriod === period && ambientPlayers.length > 0) return;
+  if (currentAmbientPeriod === period && activeAmbientPlayers.length > 0) return;
 
-  await stopAmbient();
+  // Pause current ambient players (don't destroy — they stay in pool)
+  for (const p of activeAmbientPlayers) {
+    try { p.pause(); } catch { /* ignore */ }
+  }
 
   try {
     const layers = AMBIENT_BY_PERIOD[period];
     const players: AudioPlayer[] = [];
 
     for (const layer of layers) {
-      const player = createAudioPlayer(layer.asset);
-      player.loop = true;
+      const player = getPooledPlayer(layer.asset);
       player.volume = layer.volume;
       players.push(player);
     }
 
-    ambientPlayers = players;
+    activeAmbientPlayers = players;
     currentAmbientPeriod = period;
-    ambientPlayers.forEach((p) => p.play());
+    activeAmbientPlayers.forEach((p) => p.play());
   } catch (err) {
     console.warn('Ambient failed:', err);
   }
@@ -139,33 +154,29 @@ export async function playAmbientLayered(): Promise<void> {
 }
 
 export async function stopAmbient(): Promise<void> {
-  const players = [...ambientPlayers];
-  ambientPlayers = [];
-  currentAmbientPeriod = null;
-  for (const player of players) {
-    try {
-      player.pause();
-      player.remove();
-    } catch {
-      // Silently ignore
-    }
+  for (const p of activeAmbientPlayers) {
+    try { p.pause(); } catch { /* ignore */ }
   }
+  activeAmbientPlayers = [];
+  currentAmbientPeriod = null;
 }
 
 export function isAmbientPlaying(): boolean {
-  return ambientPlayers.length > 0;
+  return activeAmbientPlayers.length > 0;
 }
 
 // ─── Cleanup ─────────────────────────────────────────────
 
 export async function cleanupSounds(): Promise<void> {
   await stopAmbient();
+  // Destroy pooled ambient players
+  for (const player of ambientPool.values()) {
+    try { player.remove(); } catch { /* ignore */ }
+  }
+  ambientPool.clear();
+  // Destroy SFX players
   for (const player of sfxCache.values()) {
-    try {
-      player.remove();
-    } catch {
-      // Ignore
-    }
+    try { player.remove(); } catch { /* ignore */ }
   }
   sfxCache.clear();
 }

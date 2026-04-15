@@ -14,6 +14,7 @@
       "backgroundColor": "#FFF8F0"
     },
     "android": {
+      "allowBackup": false,
       "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#FFF8F0",

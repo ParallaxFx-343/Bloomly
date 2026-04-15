@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, Pressable, View } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -17,6 +17,7 @@ import { Colors } from '../../constants/Colors';
 import { playSound } from '../../lib/sounds';
 import { t } from '../../lib/i18n';
 import { PlantSVG } from '../Plants/PlantSVG';
+import { LottieOverlay } from './LottieOverlay';
 import type { PlantStage } from '../../constants/Plants';
 
 interface AnimatedPlantProps {
@@ -35,6 +36,18 @@ export const AnimatedPlant = React.memo(function AnimatedPlant({ plantId, index,
   const opacity = useSharedValue(0);
   const idleY = useSharedValue(0);
   const rotation = useSharedValue(0);
+  const prevStageRef = useRef(stage);
+  const [showGlow, setShowGlow] = useState(false);
+
+  // One-shot glow on stage transition (not on initial mount)
+  useEffect(() => {
+    if (prevStageRef.current !== stage) {
+      prevStageRef.current = stage;
+      setShowGlow(true);
+      const timer = setTimeout(() => setShowGlow(false), 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [stage]);
 
   useEffect(() => {
     // Cap stagger delay so large gardens don't feel sluggish
@@ -118,6 +131,9 @@ export const AnimatedPlant = React.memo(function AnimatedPlant({ plantId, index,
     <Pressable onPress={handleTap}>
       <Animated.View style={[styles.cell, { backgroundColor: colors.card, borderColor: colors.border }, animStyle]}>
         <PlantSVG plantId={plantId} stage={stage} size={40} />
+        {stage === 'flower' && <LottieOverlay type="sparkle" speed={0.8} />}
+        {stage === 'bud' && <LottieOverlay type="pollen" speed={0.6} />}
+        {showGlow && <LottieOverlay type="glow-pulse" loop={false} speed={1} />}
         {stage === 'seed' && <Text style={[styles.stageLabel, { color: colors.textLight }]}>{t('plant.stageSeed') as string}</Text>}
         {stage === 'sprout' && <Text style={[styles.stageLabel, { color: colors.textLight }]}>{t('plant.stageSprout') as string}</Text>}
       </Animated.View>

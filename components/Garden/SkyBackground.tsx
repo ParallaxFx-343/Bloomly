@@ -5,7 +5,9 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
+  withDelay,
   withRepeat,
+  withSequence,
   cancelAnimation,
   Easing,
 } from 'react-native-reanimated';
@@ -16,7 +18,7 @@ import type { TimePeriod } from '../../constants/Colors';
 
 const SUN_SIZE = 50;
 const MOON_SIZE = 40;
-const FIREFLY_COUNT = 10;
+const FIREFLY_COUNT = 5;
 
 // Sun config per time period
 const SUN_CONFIG: Record<
@@ -30,7 +32,7 @@ const SUN_CONFIG: Record<
 };
 
 // Pre-generate star positions (static)
-const STARS: StarData[] = Array.from({ length: 12 }, () => ({
+const STARS: StarData[] = Array.from({ length: 6 }, () => ({
   x: `${5 + Math.random() * 90}%`,
   y: `${5 + Math.random() * 45}%`,
   size: 1.5 + Math.random() * 2,
@@ -277,29 +279,32 @@ const Firefly = React.memo(function Firefly({ data, visible }: { data: FireflyDa
       return;
     }
 
-    // Slight initial delay via timeout, then start looping animations
-    const timer = setTimeout(() => {
-      translateX.value = withRepeat(
+    // Pure reanimated delay — no JS setTimeout
+    translateX.value = withDelay(
+      data.delay,
+      withRepeat(
         withTiming(data.driftX, {
           duration: data.durationX,
           easing: Easing.inOut(Easing.ease),
         }),
         -1,
         true
-      );
+      )
+    );
 
-      opacity.value = withRepeat(
+    opacity.value = withDelay(
+      data.delay,
+      withRepeat(
         withTiming(0.9, {
           duration: data.opacityDuration,
           easing: Easing.inOut(Easing.ease),
         }),
         -1,
         true
-      );
-    }, data.delay);
+      )
+    );
 
     return () => {
-      clearTimeout(timer);
       cancelAnimation(translateX);
       cancelAnimation(opacity);
     };
@@ -361,17 +366,21 @@ const TwinkleStar = React.memo(function TwinkleStar({ star, visible }: { star: S
       return;
     }
 
-    opacity.value = withTiming(0.8, { duration: 1500 + star.delay });
-
-    const interval = setInterval(() => {
-      opacity.value = withTiming(
-        0.2 + Math.random() * 0.6,
-        { duration: 1200 + Math.random() * 800 }
-      );
-    }, 2000 + star.delay);
+    // Pure reanimated loop — no JS setInterval, no Math.random on UI thread
+    const cycleDuration = 2000 + star.delay;
+    opacity.value = withDelay(
+      star.delay,
+      withRepeat(
+        withSequence(
+          withTiming(0.8, { duration: cycleDuration, easing: Easing.inOut(Easing.ease) }),
+          withTiming(0.2, { duration: cycleDuration, easing: Easing.inOut(Easing.ease) })
+        ),
+        -1,
+        true
+      )
+    );
 
     return () => {
-      clearInterval(interval);
       cancelAnimation(opacity);
     };
   }, [visible]);
