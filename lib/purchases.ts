@@ -6,10 +6,9 @@ import Purchases, {
 import { Platform } from 'react-native';
 
 // ─── Configuration ───────────────────────────────────────────────
-// Replace these with your actual RevenueCat API keys from
-// https://app.revenuecat.com → Project → API Keys
-// TODO: Replace with production goog_ key from RevenueCat dashboard before Play Store submission
-const REVENUECAT_API_KEY_ANDROID = 'test_nbouVGhppdIbhyUdzVYeRZCTbKA';
+// RevenueCat public SDK keys (safe to expose in client code)
+// https://app.revenuecat.com → Project → API Keys → SDK API keys
+const REVENUECAT_API_KEY_ANDROID = 'goog_HxWvsatkRnVLDOkwjTokOhIdKjM';
 const REVENUECAT_API_KEY_IOS = 'YOUR_REVENUECAT_IOS_API_KEY'; // Not used — Android only
 
 // Entitlement ID configured in RevenueCat dashboard
