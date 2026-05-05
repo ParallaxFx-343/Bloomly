@@ -130,7 +130,7 @@ export const AnimatedPlant = React.memo(function AnimatedPlant({ plantId, index,
   return (
     <Pressable onPress={handleTap}>
       <Animated.View style={[styles.cell, { backgroundColor: colors.card, borderColor: colors.border }, animStyle]}>
-        <PlantSVG plantId={plantId} stage={stage} size={40} />
+        <PlantSVG plantId={plantId} stage={stage} size={46} />
         {stage === 'flower' && <LottieOverlay type="sparkle" speed={0.8} />}
         {stage === 'bud' && <LottieOverlay type="pollen" speed={0.6} />}
         {showGlow && <LottieOverlay type="glow-pulse" loop={false} speed={1} />}
@@ -143,20 +143,20 @@ export const AnimatedPlant = React.memo(function AnimatedPlant({ plantId, index,
 
 const styles = StyleSheet.create({
   cell: {
-    width: 68,
-    height: 68,
+    width: 76,
+    height: 76,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 16,
+    borderRadius: 18,
     borderWidth: 1,
   },
   svgWrap: {
-    width: 40,
-    height: 40,
+    width: 46,
+    height: 46,
   },
   stageLabel: {
-    fontSize: 9,
+    fontSize: 10,
     color: Colors.textLight,
-    marginTop: 1,
+    marginTop: 3,
   },
 });

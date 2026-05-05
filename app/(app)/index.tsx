@@ -2,12 +2,14 @@ import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import {
   View,
   Text,
+  TextInput,
   StyleSheet,
   FlatList,
   RefreshControl,
   Pressable,
   Alert,
   InteractionManager,
+  Keyboard,
 } from 'react-native';
 import ViewShot, { captureRef } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
@@ -24,7 +26,7 @@ import * as Haptics from 'expo-haptics';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Colors } from '../../constants/Colors';
-import { getAllPlants, getCurrentStreak, getEntryByDate, PlantRow, kvGetBool, kvSetBool } from '../../lib/database';
+import { getAllPlants, getCurrentStreak, getEntryByDate, PlantRow, kvGetBool, kvSetBool, kvGet, kvSet } from '../../lib/database';
 import { getPlantStage } from '../../constants/Plants';
 import { AnimatedPlant } from '../../components/Garden/AnimatedPlant';
 import { GardenParticles } from '../../components/Garden/GardenParticles';
@@ -60,6 +62,10 @@ export default function GardenScreen() {
   const [loading, setLoading] = useState(true);
   const [milestoneInfo, setMilestoneInfo] = useState<{ emoji: string; messageKey: string } | null>(null);
   const [adRewardClaimed, setAdRewardClaimed] = useState(true); // hide until checked
+  const [gardenName, setGardenName] = useState('');
+  const [editingName, setEditingName] = useState(false);
+  const [nameInput, setNameInput] = useState('');
+  const nameInputRef = useRef<TextInput>(null);
   const confettiRef = useRef<ConfettiCannon | null>(null);
   const milestoneTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const gardenRef = useRef<View>(null);
@@ -68,16 +74,18 @@ export default function GardenScreen() {
 
   const loadData = useCallback(async () => {
     try {
-      const [allPlants, currentStreak, todayEntry, adClaimed] = await Promise.all([
+      const [allPlants, currentStreak, todayEntry, adClaimed, savedName] = await Promise.all([
         getAllPlants(),
         getCurrentStreak(),
         getEntryByDate(getTodayStr()),
         hasClaimedAdRewardToday(),
+        kvGet('garden_name'),
       ]);
       setPlants(allPlants);
       setStreak(currentStreak);
       setHasEntryToday(!!todayEntry);
       setAdRewardClaimed(adClaimed);
+      setGardenName(savedName || '');
 
       // Check streak milestones
       const milestone = MILESTONES[currentStreak];
@@ -166,6 +174,23 @@ export default function GardenScreen() {
     }
   };
 
+  const startEditingName = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setNameInput(gardenName || (t('garden.title') as string));
+    setEditingName(true);
+    setTimeout(() => nameInputRef.current?.focus(), 100);
+  };
+
+  const saveGardenName = async () => {
+    const trimmed = nameInput.trim();
+    const defaultTitle = t('garden.title') as string;
+    const finalName = trimmed === defaultTitle ? '' : trimmed;
+    setGardenName(finalName);
+    setEditingName(false);
+    Keyboard.dismiss();
+    await kvSet('garden_name', finalName);
+  };
+
   // Pre-compute plant display data so FlatList renderItem stays lean
   const plantData = useMemo(
     () =>
@@ -195,8 +220,26 @@ export default function GardenScreen() {
 
       {/* Header */}
       <View style={styles.header}>
-        <View>
-          <Text style={[styles.title, { color: colors.text }]}>{t('garden.title') as string}</Text>
+        <View style={styles.headerLeft}>
+          {editingName ? (
+            <TextInput
+              ref={nameInputRef}
+              style={[styles.title, styles.titleInput, { color: colors.text, borderColor: colors.primary }]}
+              value={nameInput}
+              onChangeText={setNameInput}
+              onBlur={saveGardenName}
+              onSubmitEditing={saveGardenName}
+              maxLength={24}
+              returnKeyType="done"
+              selectTextOnFocus
+            />
+          ) : (
+            <Pressable onLongPress={startEditingName}>
+              <Text style={[styles.title, { color: colors.text }]}>
+                {gardenName || (t('garden.title') as string)}
+              </Text>
+            </Pressable>
+          )}
           <Text style={[styles.subtitle, { color: colors.textLight }]}>
             {plants.length === 0
               ? t('garden.empty') as string
@@ -276,16 +319,14 @@ export default function GardenScreen() {
           maxToRenderPerBatch={8}
           initialNumToRender={12}
           getItemLayout={(_data, index) => ({
-            length: 76, // 68 cell + 8 gap
-            offset: 76 * Math.floor(index / 4),
+            length: 88, // 76 cell + 12 gap
+            offset: 88 * Math.floor(index / 4),
             index,
           })}
         />
       )}
 
-      </View>{/* end gardenCapture */}
-
-      {/* CTA */}
+      {/* CTA — inside gardenCapture so it sits on the sky background */}
       {!hasEntryToday && (
         <Animated.View entering={FadeInDown.springify().damping(12).stiffness(100)}>
           <PressableSpring
@@ -300,6 +341,8 @@ export default function GardenScreen() {
           </PressableSpring>
         </Animated.View>
       )}
+
+      </View>{/* end gardenCapture */}
 
       {/* Idle floating particles — on top of everything, no touch blocking */}
       <GardenParticles visible={isFocused} />
@@ -347,23 +390,31 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 24,
-    paddingTop: 16,
-    paddingBottom: 12,
+    paddingTop: 20,
+    paddingBottom: 24,
+  },
+  headerLeft: {
+    flex: 1,
   },
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: '700',
     color: Colors.text,
   },
+  titleInput: {
+    borderBottomWidth: 2,
+    paddingVertical: 2,
+    paddingHorizontal: 0,
+  },
   subtitle: {
-    fontSize: 14,
+    fontSize: 15,
     color: Colors.textLight,
-    marginTop: 4,
+    marginTop: 6,
   },
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 10,
   },
   ambientBtn: {
     width: 36,
@@ -392,13 +443,13 @@ const styles = StyleSheet.create({
     color: Colors.text,
   },
   gardenContent: {
-    padding: 16,
-    paddingTop: 40,
-    paddingBottom: 8,
+    padding: 20,
+    paddingTop: 56,
+    paddingBottom: 90,
   },
   gardenRow: {
-    gap: 8,
-    marginBottom: 8,
+    gap: 12,
+    marginBottom: 12,
   },
   emptyGarden: {
     flex: 1,
@@ -414,7 +465,7 @@ const styles = StyleSheet.create({
   },
   plantButton: {
     marginHorizontal: 24,
-    marginBottom: 16,
+    marginBottom: 90,
     backgroundColor: Colors.primary,
     paddingVertical: 16,
     borderRadius: 16,

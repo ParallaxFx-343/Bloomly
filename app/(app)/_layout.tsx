@@ -55,16 +55,17 @@ export default function AppLayout() {
           position: 'absolute',
           backgroundColor: 'transparent',
           borderTopColor: colors.border,
-          height: 60,
-          paddingBottom: 8,
-          paddingTop: 4,
+          height: 76,
+          paddingBottom: 14,
+          paddingTop: 10,
           elevation: 0,
         },
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textLight,
         tabBarLabelStyle: {
-          fontSize: 11,
+          fontSize: 12,
           fontWeight: '600',
+          marginTop: 2,
         },
       }}
     >
@@ -72,35 +73,35 @@ export default function AppLayout() {
         name="index"
         options={{
           title: t('tab.garden') as string,
-          tabBarIcon: ({ color }) => <GardenIcon size={24} color={color} />,
+          tabBarIcon: ({ color }) => <GardenIcon size={26} color={color} />,
         }}
       />
       <Tabs.Screen
         name="entry"
         options={{
           title: t('tab.plant') as string,
-          tabBarIcon: ({ color }) => <SeedlingIcon size={24} color={color} />,
+          tabBarIcon: ({ color }) => <SeedlingIcon size={26} color={color} />,
         }}
       />
       <Tabs.Screen
         name="calendar"
         options={{
           title: t('tab.calendar') as string,
-          tabBarIcon: ({ color }) => <CalendarIcon size={24} color={color} />,
+          tabBarIcon: ({ color }) => <CalendarIcon size={26} color={color} />,
         }}
       />
       <Tabs.Screen
         name="collection"
         options={{
           title: t('tab.collection') as string,
-          tabBarIcon: ({ color }) => <CollectionIcon size={24} color={color} />,
+          tabBarIcon: ({ color }) => <CollectionIcon size={26} color={color} />,
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
           title: t('tab.settings') as string,
-          tabBarIcon: ({ color }) => <SettingsIcon size={24} color={color} />,
+          tabBarIcon: ({ color }) => <SettingsIcon size={26} color={color} />,
         }}
       />
       <Tabs.Screen

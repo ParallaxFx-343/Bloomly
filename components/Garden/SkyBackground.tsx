@@ -34,7 +34,7 @@ const SUN_CONFIG: Record<
 // Pre-generate star positions (static)
 const STARS: StarData[] = Array.from({ length: 6 }, () => ({
   x: `${5 + Math.random() * 90}%`,
-  y: `${5 + Math.random() * 45}%`,
+  y: `${25 + Math.random() * 50}%`,
   size: 1.5 + Math.random() * 2,
   delay: Math.random() * 3000,
 }));
@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
   },
   moonAnchor: {
     position: 'absolute',
-    top: '8%' as any,
+    top: '35%' as any,
     left: '10%' as any,
     width: MOON_SIZE,
     height: MOON_SIZE,

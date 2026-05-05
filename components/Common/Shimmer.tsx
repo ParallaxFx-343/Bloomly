@@ -53,7 +53,7 @@ export function Shimmer({ width, height, borderRadius = 12, style }: ShimmerProp
 
 /** Skeleton placeholder for a plant card */
 export function PlantCardSkeleton() {
-  return <Shimmer width={68} height={68} borderRadius={16} />;
+  return <Shimmer width={76} height={76} borderRadius={18} />;
 }
 
 /** Skeleton placeholder for a full-width row */

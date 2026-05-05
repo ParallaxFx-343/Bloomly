@@ -23,7 +23,7 @@ import { useRouter } from 'expo-router';
 import { Colors } from '../../constants/Colors';
 import { kvSetBool } from '../../lib/database';
 import * as Haptics from 'expo-haptics';
-import { SeedlingIcon, FlowerIcon, HeartIcon } from '../../components/Common/Icon';
+import { SeedlingIcon, FlowerIcon, HeartIcon, StreakIcon } from '../../components/Common/Icon';
 import { t } from '../../lib/i18n';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -53,9 +53,15 @@ function getSlides(): OnboardingSlide[] {
     },
     {
       id: '3',
-      icon: <HeartIcon size={80} color={Colors.accent} />,
+      icon: <StreakIcon size={80} />,
       title: t('onboarding.slide3Title') as string,
       subtitle: t('onboarding.slide3Sub') as string,
+    },
+    {
+      id: '4',
+      icon: <HeartIcon size={80} color={Colors.accent} />,
+      title: t('onboarding.slide4Title') as string,
+      subtitle: t('onboarding.slide4Sub') as string,
     },
   ];
 }

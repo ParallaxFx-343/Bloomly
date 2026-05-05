@@ -52,14 +52,14 @@ function RootLayoutInner() {
     return (
       <View style={[styles.loading, { backgroundColor: colors.background }]}>
         <ActivityIndicator size="large" color={colors.primary} />
-        <StatusBar style={isDark ? 'light' : 'dark'} backgroundColor={colors.background} />
+        <StatusBar style={isDark ? 'light' : 'dark'} translucent backgroundColor="transparent" />
       </View>
     );
   }
 
   return (
     <>
-      <StatusBar style={isDark ? 'light' : 'dark'} backgroundColor={colors.background} />
+      <StatusBar style={isDark ? 'light' : 'dark'} translucent backgroundColor="transparent" />
       <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
         <Stack.Screen name="(onboarding)" />
         <Stack.Screen name="(app)" />

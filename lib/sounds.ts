@@ -35,12 +35,12 @@ const AMBIENT_BY_PERIOD: Record<TimePeriod, AmbientLayer[]> = {
     { asset: require('../assets/sounds/birds.mp3'), volume: 0.1 },
   ],
   sunset: [
-    { asset: require('../assets/sounds/crickets.mp3'), volume: 0.15 },
-    { asset: require('../assets/sounds/wind.mp3'), volume: 0.12 },
+    { asset: require('../assets/sounds/wind.mp3'), volume: 0.18 },
+    { asset: require('../assets/sounds/crickets.mp3'), volume: 0.06 },
   ],
   night: [
-    { asset: require('../assets/sounds/crickets.mp3'), volume: 0.25 },
-    { asset: require('../assets/sounds/rain.mp3'), volume: 0.08 },
+    { asset: require('../assets/sounds/rain.mp3'), volume: 0.2 },
+    { asset: require('../assets/sounds/crickets.mp3'), volume: 0.08 },
   ],
 };
 
