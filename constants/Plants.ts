@@ -43,6 +43,14 @@ const PLANT_DEFS: PlantDef[] = [
   { id: 'loto', nameKey: 'plant.loto', category: 'yoMisma', premium: true, stages: { seed: '🌰', sprout: '🌱', bud: '🌿', flower: '🪷' } },
 ];
 
+export const STREAK_REWARDS: Record<number, string> = {
+  7: 'cerezo',
+  14: 'bonsai',
+  30: 'orquidea',
+  60: 'palmera',
+  100: 'loto',
+};
+
 export function getPlants(): PlantType[] {
   return PLANT_DEFS.map((d) => ({
     ...d,

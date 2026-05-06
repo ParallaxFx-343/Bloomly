@@ -54,11 +54,11 @@ const es: Translations = {
   'garden.streakDays': 'días seguidos',
 
   // Milestones
-  'milestone.7': '¡7 días seguidos!',
-  'milestone.14': '¡14 días de gratitud!',
-  'milestone.30': '¡30 días — Sos increíble!',
-  'milestone.60': '¡60 días — Imparable!',
-  'milestone.100': '¡100 días — Leyenda!',
+  'milestone.7': '¡7 días seguidos!\nDesbloqueaste el Cerezo 🌸',
+  'milestone.14': '¡14 días de gratitud!\nDesbloqueaste el Bonsái 🎋',
+  'milestone.30': '¡30 días — Sos increíble!\nDesbloqueaste la Orquídea 🪻',
+  'milestone.60': '¡60 días — Imparable!\nDesbloqueaste la Palmera 🌴',
+  'milestone.100': '¡100 días — Leyenda!\nDesbloqueaste el Loto 🪷',
 
   // Entry screen
   'entry.title': '¿Por qué estás agradecida hoy?',
@@ -232,11 +232,11 @@ const en: Translations = {
   'garden.streakDays': 'day streak',
 
   // Milestones
-  'milestone.7': '7 days in a row!',
-  'milestone.14': '14 days of gratitude!',
-  'milestone.30': '30 days — You\'re amazing!',
-  'milestone.60': '60 days — Unstoppable!',
-  'milestone.100': '100 days — Legend!',
+  'milestone.7': '7 days in a row!\nYou unlocked the Cherry Blossom 🌸',
+  'milestone.14': '14 days of gratitude!\nYou unlocked the Bonsai 🎋',
+  'milestone.30': '30 days — You\'re amazing!\nYou unlocked the Orchid 🪻',
+  'milestone.60': '60 days — Unstoppable!\nYou unlocked the Palm Tree 🌴',
+  'milestone.100': '100 days — Legend!\nYou unlocked the Lotus 🪷',
 
   // Entry screen
   'entry.title': 'What are you grateful for today?',

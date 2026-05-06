@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Animated, {
   FadeInDown,
@@ -12,18 +12,20 @@ import Animated, {
 
 const snapEase = Easing.bezier(0.34, 1.56, 0.64, 1);
 import * as Haptics from 'expo-haptics';
+import { useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path, Rect } from 'react-native-svg';
 import { Colors } from '../../constants/Colors';
 import { useTheme } from '../../contexts/ThemeContext';
-import { PLANTS, PlantType } from '../../constants/Plants';
+import { PLANTS, PlantType, STREAK_REWARDS } from '../../constants/Plants';
 import { PlantSVG } from '../../components/Plants/PlantSVG';
 import { AnimatedPressable } from '../../components/Common/PressableSpring';
+import { getUnlockedPlantIds } from '../../lib/database';
 import { playSound } from '../../lib/sounds';
 import { t } from '../../lib/i18n';
 import { usePremium } from '../../contexts/PremiumContext';
 
-const PlantCard = React.memo(function PlantCard({ plant, isPremium, index }: { plant: PlantType; isPremium?: boolean; index: number }) {
+const PlantCard = React.memo(function PlantCard({ plant, locked, streakUnlocked, streakDay, index }: { plant: PlantType; locked?: boolean; streakUnlocked?: boolean; streakDay?: number; index: number }) {
   const { colors } = useTheme();
   const scale = useSharedValue(1);
   const animStyle = useAnimatedStyle(() => ({
@@ -45,14 +47,18 @@ const PlantCard = React.memo(function PlantCard({ plant, isPremium, index }: { p
         style={[
           styles.plantCard,
           { backgroundColor: colors.card, borderColor: colors.border },
-          isPremium && [styles.premiumCard, { borderColor: colors.secondary }],
+          locked && [styles.premiumCard, { borderColor: colors.secondary }],
+          streakUnlocked && [styles.streakCard, { borderColor: colors.accent }],
           animStyle,
         ]}
         onPress={handlePress}
       >
         <PlantSVG plantId={plant.id} stage="flower" size={40} />
         <Text style={[styles.plantName, { color: colors.text }]}>{plant.name}</Text>
-        {isPremium && (
+        {locked && !streakUnlocked && streakDay && (
+          <Text style={[styles.streakHint, { color: colors.textLight }]}>{streakDay}d</Text>
+        )}
+        {locked && !streakUnlocked && !streakDay && (
           <Svg width={14} height={14} viewBox="0 0 24 24" fill="none">
             <Rect x={5} y={11} width={14} height={11} rx={2} fill={colors.textLight} fillOpacity={0.3} stroke={colors.textLight} strokeWidth={1.5} />
             <Path d="M8 11V7C8 4.79 9.79 3 12 3C14.21 3 16 4.79 16 7V11" stroke={colors.textLight} strokeWidth={1.5} strokeLinecap="round" />
@@ -63,11 +69,24 @@ const PlantCard = React.memo(function PlantCard({ plant, isPremium, index }: { p
   );
 });
 
+const streakRewardPlantIds = new Set(Object.values(STREAK_REWARDS));
+const streakDayByPlant: Record<string, number> = {};
+for (const [day, plantId] of Object.entries(STREAK_REWARDS)) {
+  streakDayByPlant[plantId] = Number(day);
+}
+
 export default function CollectionScreen() {
   const { colors } = useTheme();
   const { isPremium } = usePremium();
+  const [unlockedIds, setUnlockedIds] = useState<Set<string>>(new Set());
   const freePlants = useMemo(() => PLANTS.filter((p) => !p.premium), []);
   const premiumPlants = useMemo(() => PLANTS.filter((p) => p.premium), []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getUnlockedPlantIds().then((ids) => setUnlockedIds(new Set(ids)));
+    }, [])
+  );
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -94,9 +113,21 @@ export default function CollectionScreen() {
           {t('collection.premium') as string}
         </Animated.Text>
         <View style={styles.grid}>
-          {premiumPlants.map((plant, i) => (
-            <PlantCard key={plant.id} plant={plant} isPremium={!isPremium} index={freePlants.length + i} />
-          ))}
+          {premiumPlants.map((plant, i) => {
+            const isUnlocked = unlockedIds.has(plant.id);
+            const isStreakReward = streakRewardPlantIds.has(plant.id);
+            const locked = !isPremium && !isUnlocked;
+            return (
+              <PlantCard
+                key={plant.id}
+                plant={plant}
+                locked={locked}
+                streakUnlocked={isUnlocked && !isPremium}
+                streakDay={locked && isStreakReward ? streakDayByPlant[plant.id] : undefined}
+                index={freePlants.length + i}
+              />
+            );
+          })}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -149,6 +180,14 @@ const styles = StyleSheet.create({
   premiumCard: {
     opacity: 0.6,
     borderStyle: 'dashed',
+  },
+  streakCard: {
+    opacity: 1,
+    borderWidth: 2,
+  },
+  streakHint: {
+    fontSize: 10,
+    fontWeight: '600',
   },
   plantSvg: {
     marginBottom: 2,

@@ -26,8 +26,8 @@ import * as Haptics from 'expo-haptics';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Colors } from '../../constants/Colors';
-import { getAllPlants, getCurrentStreak, getEntryByDate, PlantRow, kvGetBool, kvSetBool, kvGet, kvSet } from '../../lib/database';
-import { getPlantStage } from '../../constants/Plants';
+import { getAllPlants, getCurrentStreak, getEntryByDate, PlantRow, kvGetBool, kvSetBool, kvGet, kvSet, createUnlock } from '../../lib/database';
+import { getPlantStage, STREAK_REWARDS } from '../../constants/Plants';
 import { AnimatedPlant } from '../../components/Garden/AnimatedPlant';
 import { GardenParticles } from '../../components/Garden/GardenParticles';
 import { SkyBackground } from '../../components/Garden/SkyBackground';
@@ -41,6 +41,14 @@ import { getTodayStr } from '../../lib/utils';
 import { t } from '../../lib/i18n';
 import { usePremium } from '../../contexts/PremiumContext';
 import { showRewardedAd, hasClaimedAdRewardToday } from '../../lib/ads';
+
+const PERIOD_EMOJI: Record<string, string> = {
+  dawn: '\u{1F305}',
+  morning: '\u{2600}\u{FE0F}',
+  afternoon: '\u{1F324}\u{FE0F}',
+  sunset: '\u{1F307}',
+  night: '\u{1F319}',
+};
 
 const MILESTONES: Record<number, { emoji: string; messageKey: string }> = {
   7: { emoji: '\uD83D\uDD25', messageKey: 'milestone.7' },
@@ -87,12 +95,16 @@ export default function GardenScreen() {
       setAdRewardClaimed(adClaimed);
       setGardenName(savedName || '');
 
-      // Check streak milestones
+      // Check streak milestones & unlock reward plants
       const milestone = MILESTONES[currentStreak];
       if (milestone) {
         const alreadyCelebrated = await kvGetBool(`milestone_${currentStreak}`);
         if (!alreadyCelebrated) {
           await kvSetBool(`milestone_${currentStreak}`, true);
+          const rewardPlantId = STREAK_REWARDS[currentStreak];
+          if (rewardPlantId) {
+            await createUnlock('plant', rewardPlantId, `streak:${currentStreak}`);
+          }
           setMilestoneInfo(milestone);
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
           playSound('celebrate');
@@ -243,7 +255,7 @@ export default function GardenScreen() {
           <Text style={[styles.subtitle, { color: colors.textLight }]}>
             {plants.length === 0
               ? t('garden.empty') as string
-              : (t('garden.plantCount') as (n: number) => string)(plants.length)}
+              : `${(t('garden.plantCount') as (n: number) => string)(plants.length)}  ${PERIOD_EMOJI[timePeriod] || ''}`}
           </Text>
         </View>
         <View style={styles.headerRight}>

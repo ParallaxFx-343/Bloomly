@@ -47,7 +47,8 @@ async function initDatabase(database: SQLite.SQLiteDatabase): Promise<void> {
       type TEXT NOT NULL,
       item_id TEXT NOT NULL,
       unlocked_at TEXT NOT NULL,
-      source TEXT NOT NULL
+      source TEXT NOT NULL,
+      UNIQUE(type, item_id)
     );
 
     CREATE TABLE IF NOT EXISTS kv_store (
@@ -166,6 +167,24 @@ export async function createPlant(
 export async function getAllPlants(): Promise<PlantRow[]> {
   const db = await getDatabase();
   return db.getAllAsync<PlantRow>('SELECT * FROM plants ORDER BY planted_at ASC');
+}
+
+// ─── Unlocks ──────────────────────────────────────────────
+
+export async function createUnlock(type: string, itemId: string, source: string): Promise<void> {
+  const db = await getDatabase();
+  await db.runAsync(
+    'INSERT OR IGNORE INTO unlocks (type, item_id, unlocked_at, source) VALUES (?, ?, datetime("now"), ?)',
+    [type, itemId, source]
+  );
+}
+
+export async function getUnlockedPlantIds(): Promise<string[]> {
+  const db = await getDatabase();
+  const rows = await db.getAllAsync<{ item_id: string }>(
+    "SELECT item_id FROM unlocks WHERE type = 'plant'"
+  );
+  return rows.map((r) => r.item_id);
 }
 
 // ─── Streaks ───────────────────────────────────────────────

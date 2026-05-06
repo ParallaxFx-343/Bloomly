@@ -21,14 +21,14 @@ import Animated, {
 
 const snapEase = Easing.bezier(0.34, 1.56, 0.64, 1);
 import { PressableSpring } from '../../components/Common/PressableSpring';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Colors } from '../../constants/Colors';
 import { CATEGORIES, CategoryId } from '../../constants/Categories';
 import { PLANTS, PlantType } from '../../constants/Plants';
-import { createEntry, createPlant, getEntryByDate } from '../../lib/database';
+import { createEntry, createPlant, getEntryByDate, getUnlockedPlantIds } from '../../lib/database';
 import { AnimatedCategoryCard } from '../../components/Entry/AnimatedCategoryCard';
 import { PlantingCelebration } from '../../components/Garden/PlantingCelebration';
 import { PlantSVG } from '../../components/Plants/PlantSVG';
@@ -47,10 +47,10 @@ function randomPosition(): { x: number; y: number } {
   };
 }
 
-/** Get available plants for selected categories (premium unlocked if user has premium) */
-function getAvailablePlants(categories: CategoryId[], hasPremium: boolean): PlantType[] {
+/** Get available plants for selected categories */
+function getAvailablePlants(categories: CategoryId[], hasPremium: boolean, unlockedIds: Set<string>): PlantType[] {
   const catSet = new Set(categories);
-  return PLANTS.filter((p) => catSet.has(p.category) && (hasPremium || !p.premium));
+  return PLANTS.filter((p) => catSet.has(p.category) && (hasPremium || !p.premium || unlockedIds.has(p.id)));
 }
 
 export default function EntryScreen() {
@@ -62,12 +62,15 @@ export default function EntryScreen() {
   const [saving, setSaving] = useState(false);
   const [celebrating, setCelebrating] = useState(false);
   const [adRewardActive, setAdRewardActive] = useState(false);
+  const [unlockedPlants, setUnlockedPlants] = useState<Set<string>>(new Set());
   const router = useRouter();
 
-  // Check ad reward on mount
-  React.useEffect(() => {
-    hasClaimedAdRewardToday().then(setAdRewardActive);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      hasClaimedAdRewardToday().then(setAdRewardActive);
+      getUnlockedPlantIds().then((ids) => setUnlockedPlants(new Set(ids)));
+    }, [])
+  );
 
   const placeholder = useMemo(() => {
     const prompts = Array.from({ length: 8 }, (_, i) => t(`prompt.${i}` as any) as string);
@@ -90,7 +93,7 @@ export default function EntryScreen() {
   }, []);
 
   const canUsePremiumPlants = isPremium || adRewardActive;
-  const availablePlants = useMemo(() => getAvailablePlants(Array.from(selected), canUsePremiumPlants), [selected, canUsePremiumPlants]);
+  const availablePlants = useMemo(() => getAvailablePlants(Array.from(selected), canUsePremiumPlants, unlockedPlants), [selected, canUsePremiumPlants, unlockedPlants]);
 
   const handlePlant = async () => {
     if (selected.size === 0) {
