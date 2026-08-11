@@ -11,7 +11,7 @@
   "dependencies": {
     "@expo/metro-runtime": "~55.0.6",
     "babel-preset-expo": "~55.0.8",
-    "expo": "~55.0.8",
+    "expo": "~55.0.28",
     "expo-audio": "~55.0.9",
     "expo-blur": "~55.0.10",
     "expo-constants": "~55.0.9",
